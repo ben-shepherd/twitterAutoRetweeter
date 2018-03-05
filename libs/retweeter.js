@@ -81,14 +81,11 @@ module.exports = function () {
         // Search tweets
         self.twitterHelper.searchTweets(params, function(err, data, response) {
 
-            var tweets;
+            var tweets = data.statuses;
 
             // Media only check
             if(self.config.media_only) {
-                tweets = twitterHelper.getMediaStatuses(data.statuses);
-            }
-            else {
-                tweets = data.statuses;
+                tweets = self.twitterHelper.getMediaStatuses(tweets);
             }
 
             // Filter out blacklisted words
