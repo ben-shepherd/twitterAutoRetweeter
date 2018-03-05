@@ -16,7 +16,6 @@ retweeter.setQueryString(queryStr);
 retweeter.setCount(config.tweets_count);
 retweeter.setIntervalMinutes(config.interval_minutes);
 retweeter.setBlacklist(config.blacklist);
-retweeter.setAutoFollow(config.auto_follower.enabled);
 retweeter.setConfig(config);
 retweeter.init();
 

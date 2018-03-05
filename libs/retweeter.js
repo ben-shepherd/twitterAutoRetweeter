@@ -6,7 +6,6 @@ module.exports = function () {
         this.interval = 300000, // 5 minutes
         this.blacklist = [],
         this.twitterHelper,
-        this.autoFollow = false,
         this.config;
 
         this.setTwitt = function(T) {
@@ -23,9 +22,6 @@ module.exports = function () {
         },
         this.setBlacklist = function(bl) {
             this.blacklist = bl;
-        },
-        this.setAutoFollow = function(af) {
-            this.autoFollow = af;
         },
         this.setConfig = function(c) {
             this.config = c;
@@ -82,29 +78,32 @@ module.exports = function () {
             result_type: self.result_type
         };
 
+        // Search tweets
         self.twitterHelper.searchTweets(params, function(err, data, response) {
 
             var tweets;
 
+            // Media only check
             if(self.config.media_only) {
                 tweets = twitterHelper.getMediaStatuses(data.statuses);
             }
             else {
                 tweets = data.statuses;
             }
-            console.log('Found ' + tweets.length + ' tweets');
 
+            // Filter out blacklisted words
             mediaTweets = self.twitterHelper.getStatusesWithoutTheseWords(self.blacklist, tweets);
             console.log('Found ' + tweets.length + ' tweets after blacklist filter');
-
 
             for (var i in tweets) {
 
                 var tweet = tweets[i];
 
+                // Retweet
                 self.twitterHelper.retweet(tweet.id_str, function (err, data) {
 
-                    if(self.autoFollow) {
+                    // Follow retweeted
+                    if(self.config.follow_retweeted_user) {
                         self.twitterHelper.follow(tweet.user.id_str);
                     }
 
