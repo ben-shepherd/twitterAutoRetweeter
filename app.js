@@ -8,7 +8,7 @@ var T = new Twit(config.twitter_credentials);
 var twitterHelper = require('./libs/twitter-helper');
 
 
-var queryStr = twitterHelper.createORQueryStringFromArray(config.hashtags);
+var queryStr = twitterHelper.createORQueryStringFromArray(config.search_terms);
 var Retweeter = require('./libs/retweeter');
 var retweeter = new Retweeter();
 retweeter.setTwitt(T);
@@ -16,6 +16,8 @@ retweeter.setQueryString(queryStr);
 retweeter.setCount(config.tweets_count);
 retweeter.setIntervalMinutes(config.interval_minutes);
 retweeter.setBlacklist(config.blacklist);
+retweeter.setAutoFollow(config.auto_follower.enabled);
+retweeter.setConfig(config);
 retweeter.init();
 
 // Follow followers

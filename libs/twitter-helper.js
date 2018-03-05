@@ -93,13 +93,7 @@ module.exports.createORQueryStringFromArray = function(dataArray) {
  * @param count
  * @param callback
  */
-module.exports.searchTweets = function(search, count, callback) {
-
-    var params = {
-        q: search,
-        count: count,
-        result_type: 'recent',
-    };
+module.exports.searchTweets = function(params, callback) {
 
     module.exports.T.get('search/tweets', params, function (err, data, response) {
         callback(err, data, response);
