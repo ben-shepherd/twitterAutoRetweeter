@@ -1,0 +1,16 @@
+{
+  "name": "twitterAutoRetweeter",
+  "version": "1.0.0",
+  "description": "A bot that retweets and auto follows",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Shepherd @ www.benshepherd.me",
+  "license": "ISC",
+  "dependencies": {
+    "twit": "^2.2.9",
+    "twitter-autofollow-bot": "^0.1.1"
+  }
+}
