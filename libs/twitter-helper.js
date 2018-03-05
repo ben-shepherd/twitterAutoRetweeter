@@ -125,3 +125,17 @@ module.exports.follow = function(userId, callback) {
     }, callback);
 }
 
+/**
+ * Like a tweet
+ * @param tweetId
+ * @param callback
+ */
+module.exports.like = function(tweetId, callback) {
+
+    console.log('Liking tweet', tweetId);
+    module.exports.T.post('favorites/create', {
+        id: tweetId
+    },callback );
+
+}
+

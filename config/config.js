@@ -17,6 +17,10 @@ module.exports = {
     follow_retweeted_user: true,
 
     /**
+     * Auto like retweets
+     */
+
+    /**
      * Restricts tweets to the given language, given by an ISO 639-1 code. Language detection is best-effort.
      *
      */

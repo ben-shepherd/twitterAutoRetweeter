@@ -103,6 +103,10 @@ module.exports = function () {
                     if(self.config.follow_retweeted_user) {
                         self.twitterHelper.follow(tweet.user.id_str);
                     }
+                    // Like retweeted
+                    if(self.config.like_retweets) {
+                        self.twitterHelper.like(tweet.id_str);
+                    }
 
                     if (err) {
                         console.log('Failed to retweet (' + tweet.id + '): ', err.message);
