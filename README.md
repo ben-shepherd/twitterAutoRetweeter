@@ -61,7 +61,14 @@ Tweets containing these terms will not be retweeted
         'badword',    
         'another bad word'    
     ],  
-  
+
+Tweets containing these users will not be retweeted
+Matches: id, id_str, screen_name
+
+    blacklist_users: [
+
+    ],
+
 The bot includes an auto follower which will follow anyone who follows you. This can be configured and disabled below.
 
 Package by @pilwon [Click here for more information](https://github.com/pilwon/node-twitter-autofollow-bot) 

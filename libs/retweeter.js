@@ -45,7 +45,7 @@ module.exports = function () {
             throw 'config is not set';
         }
 
-        console.log('retweeter starting with config: ', this.config);
+        console.log('retweeter starting');
 
         this.twitterHelper = require('./twitter-helper');
         this.twitterHelper.T = this.T;
@@ -82,6 +82,10 @@ module.exports = function () {
         self.twitterHelper.searchTweets(params, function (err, data, response) {
 
             var tweets = data.statuses;
+
+            // Remove black list users
+            tweets = self.twitterHelper.getStatusesWithTheseUsers(self.config.blacklist_users, tweets);
+            console.log('Found ' + tweets.length + ' tweets after user blacklist filter');
 
             // Media only check
             if (self.config.media_only) {

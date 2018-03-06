@@ -72,6 +72,17 @@ module.exports = {
     ],
 
     /**
+     * Blacklist users
+     * Matches the following:
+     * id
+     * id_str
+     * screen_name
+     */
+    blacklist_users: [
+
+    ],
+
+    /**
      * Configuration for auto follower
      */
     auto_follower: {

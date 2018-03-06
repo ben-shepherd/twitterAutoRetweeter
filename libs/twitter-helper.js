@@ -49,6 +49,28 @@ module.exports.getStatusesWithoutTheseWords = function(textsArray, statuses) {
     return tweets;
 };
 
+module.exports.getStatusesWithTheseUsers = function(usersArray, statuses) {
+
+    if(typeof usersArray === 'string') {
+        usersArray = [usersArray];
+    }
+
+    var tweets = [];
+
+    for(i in statuses) {
+        var tweet = statuses[i];
+
+        if(usersArray.includes(tweet.user.id) == false &&
+            usersArray.includes(tweet.user.id_str) == false &&
+            usersArray.includes(tweet.user.screen_name) == false) {
+
+            tweets.push(tweet);
+        }
+    }
+
+    return tweets;
+};
+
 /**
  * Check if a tweet contains media
  * @param status
