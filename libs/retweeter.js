@@ -1,66 +1,66 @@
 module.exports = function () {
 
-    this.T,
-        this.query,
-        this.count,
-        this.interval = 300000, // 5 minutes
-        this.blacklist = [],
-        this.twitterHelper,
-        this.config;
+    this.T;
+    this.query;
+    this.count;
+    this.interval = 300000; // 5 minutes
+    this.blacklist = [];
+    this.twitterHelper;
+    this.config;
 
-        this.setTwitt = function(T) {
-            this.T = T;
-        },
-        this.setQueryString = function(q) {
-            this.query = q;
-        },
-        this.setCount = function(c) {
-            this.count = c;
-        },
-        this.setIntervalMinutes = function(i) {
-            this.interval = i * 60000;
-        },
-        this.setBlacklist = function(bl) {
-            this.blacklist = bl;
-        },
-        this.setConfig = function(c) {
-            this.config = c;
-        },
+    this.setTwitt = function (T) {
+        this.T = T;
+    };
+    this.setQueryString = function (q) {
+        this.query = q;
+    };
+    this.setCount = function (c) {
+        this.count = c;
+    };
+    this.setIntervalMinutes = function (i) {
+        this.interval = i * 60000;
+    };
+    this.setBlacklist = function (bl) {
+        this.blacklist = bl;
+    };
+    this.setConfig = function (c) {
+        this.config = c;
+    };
 
-        /**
-         * begin retweeter
-         */
-        this.init = function() {
+    /**
+     * begin retweeter
+     */
+    this.init = function () {
 
-            if(typeof this.T === 'undefined') {
-                throw 'Twitt API is not set';
-            }
-            if(typeof this.query === 'undefined') {
-                throw 'query string is not set';
-            }
-            if(typeof this.count === 'undefined') {
-                throw 'count is not set';
-            }
-            if(typeof this.config === 'undefined') {
-                throw 'config is not set';
-            }
+        if (typeof this.T === 'undefined') {
+            throw 'Twitt API is not set';
+        }
+        if (typeof this.query === 'undefined') {
+            throw 'query string is not set';
+        }
+        if (typeof this.count === 'undefined') {
+            throw 'count is not set';
+        }
+        if (typeof this.config === 'undefined') {
+            throw 'config is not set';
+        }
 
-            console.log('retweeter starting with config: ', this.config);
+        console.log('retweeter starting with config: ', this.config);
 
-            this.twitterHelper = require('./twitter-helper');
-            this.twitterHelper.T = this.T;
-            var retweet = this.retweet;
-            var self = this;
+        this.twitterHelper = require('./twitter-helper');
+        this.twitterHelper.T = this.T;
+        var retweet = this.retweet;
+        var self = this;
 
 
-            // Begin interval
-            setInterval(function() {
-                retweet(self);
-            }, this.interval);
-
-            // Explicitly run once
+        // Begin interval
+        setInterval(function () {
             retweet(self);
-        };
+        }, this.interval);
+
+        // Explicitly run once
+        retweet(self);
+    };
 
     /**
      * Search and Retweet
@@ -69,7 +69,7 @@ module.exports = function () {
      * @param count
      * @param twitterHelper
      */
-    this.retweet = function(self) {
+    this.retweet = function (self) {
 
         var params = {
             q: self.query,
@@ -79,12 +79,12 @@ module.exports = function () {
         };
 
         // Search tweets
-        self.twitterHelper.searchTweets(params, function(err, data, response) {
+        self.twitterHelper.searchTweets(params, function (err, data, response) {
 
             var tweets = data.statuses;
 
             // Media only check
-            if(self.config.media_only) {
+            if (self.config.media_only) {
                 tweets = self.twitterHelper.getMediaStatuses(tweets);
             }
 
@@ -96,25 +96,27 @@ module.exports = function () {
 
                 var tweet = tweets[i];
 
+                // Follow retweeted
+                if (self.config.follow_retweeted_user) {
+                    self.twitterHelper.follow(tweet.user.id_str);
+                }
+                // Like retweeted
+                if (self.config.like_retweets) {
+                    self.twitterHelper.like(tweet.id_str);
+                }
+
                 // Retweet
-                self.twitterHelper.retweet(tweet.id_str, function (err, data) {
+                if (self.config.retweet) {
+                    self.twitterHelper.retweet(tweet.id_str, function (err, data) {
 
-                    // Follow retweeted
-                    if(self.config.follow_retweeted_user) {
-                        self.twitterHelper.follow(tweet.user.id_str);
-                    }
-                    // Like retweeted
-                    if(self.config.like_retweets) {
-                        self.twitterHelper.like(tweet.id_str);
-                    }
-
-                    if (err) {
-                        console.log('Failed to retweet (' + tweet.id + '): ', err.message);
-                    }
-                    else {
-                        console.log('Retweeted (' + tweet.id + ') Text:', tweets[i].text);
-                    }
-                });
+                        if (err) {
+                            console.log('Failed to retweet (' + tweet.id + '): ', err.message);
+                        }
+                        else {
+                            console.log('Retweeted (' + tweet.id + ') Text:', tweets[i].text);
+                        }
+                    });
+                }
             }
         });
     };
